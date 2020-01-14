@@ -25,7 +25,7 @@ resource "azurerm_virtual_machine" "vm" {
   primary_network_interface_id = var.primary_network_interface_id
 
   os_profile {
-    computer_name   = var.os_profile.computer_name
+    computer_name   = module.caf_name_vm.gen
     admin_username  = var.os_profile.admin_username 
     admin_password  = lookup(var.os_profile, "admin_password", null)
   }

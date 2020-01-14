@@ -6,7 +6,6 @@ variable "tags" {
   
 }
 
-
 variable "name" {
   description = "(Required) Specifies the name of the Virtual Machine. Changing this forces a new resource to be created."
 }
@@ -57,5 +56,3 @@ variable "vm_size" {
 variable "convention" {
   description = "(Required) Naming convention to use."
 }
-
-## need to implement core of diags 
