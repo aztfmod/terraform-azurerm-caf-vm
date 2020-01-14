@@ -1,14 +1,23 @@
+module "caf_name_vm" {
+  source  = "aztfmod/caf-naming/azurerm"
+  version = "~> 0.1.0"
+  
+  name    = var.name
+  type    = "gen"
+  convention  = var.convention
+}
+
 resource "tls_private_key" "ssh" {
   algorithm   = "RSA"
   rsa_bits    = 4096
 }
 
-
 resource "azurerm_virtual_machine" "vm" {
-  name                  = var.name
+  name                  = module.caf_name_vm.gen
   resource_group_name   = var.resource_group_name
   location              = var.location
   vm_size               = var.vm_size
+  tags                  = local.tags
   network_interface_ids = var.network_interface_ids
 
   delete_os_disk_on_termination = true
@@ -18,6 +27,7 @@ resource "azurerm_virtual_machine" "vm" {
   os_profile {
     computer_name   = var.os_profile.computer_name
     admin_username  = var.os_profile.admin_username 
+    admin_password  = lookup(var.os_profile, "admin_password", null)
   }
 
   // Reference a marketplace image
@@ -70,9 +80,35 @@ resource "azurerm_virtual_machine" "vm" {
     }
   }
 
+  dynamic "os_profile_windows_config" {
+
+    for_each = lower(var.os) == "windows" ? [1] :[]
+
+    content {
+      provision_vm_agent        = lookup(var.os_profile, "provision_vm_agent", null)
+      enable_automatic_upgrades = lookup(var.os_profile, "enable_automatic_upgrades", null)
+      timezone                  = lookup(var.os_profile, "timezone", null)
+      }
+    }
+
+  dynamic "os_profile_secrets" {
+
+    for_each = var.os_profile_secrets == null ? [] : [1]
+
+    content {
+      source_vault_id           = var.os_profile_secrets.source_vault_id
+      vault_certificates {
+          certificate_url       = var.os_profile_secrets.vault_certificates.certificate_url
+          certificate_store     = lookup(var.os_profile_secrets.vault_certificates,"certificate_store",null )
+      }
+    }
+  }
+
   identity {
     type = "SystemAssigned"
   }
+
+  license_type = lookup(var.os_profile, "license_type", null)
 
   provisioner "local-exec" {
     command = "az vm restart --name ${azurerm_virtual_machine.vm.name} --resource-group ${var.resource_group_name}"

@@ -46,6 +46,16 @@ variable "storage_os_disk" {
   default = null
 }
 
-variable "vm_size" {
-
+variable "os_profile_secrets" {
+  default = null
 }
+
+variable "vm_size" {
+  description = "(Required) Azure VM size name, to list all images available in a regionm use : az vm list-sizes --location <region>"
+}
+
+variable "convention" {
+  description = "(Required) Naming convention to use."
+}
+
+## need to implement core of diags 

@@ -23,3 +23,16 @@ output "ssh_private_key_pem" {
 output "msi_system_principal_id" {
     value = azurerm_virtual_machine.vm.identity.0.principal_id
 }
+
+output "name" {
+  value = azurerm_virtual_machine.vm.name
+}
+
+output "id" {
+  value = azurerm_virtual_machine.vm.id
+}
+
+output "object" {
+    sensitive = true
+    value = azurerm_virtual_machine.vm.id
+}
