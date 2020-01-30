@@ -8,6 +8,9 @@ module "caf_name_vm" {
   convention  = var.convention
 }
 
+locals {
+  vm_name = lower(var.os) == "linux" ? module.caf_name_vm.vml :module.caf_name_vm.vmw
+}
 
 resource "tls_private_key" "ssh" {
   algorithm   = "RSA"
@@ -15,7 +18,7 @@ resource "tls_private_key" "ssh" {
 }
 
 resource "azurerm_virtual_machine" "vm" {
-  name                  = lower(var.os) == "linux" ? module.caf_name_vm.vml :module.caf_name_vm.vmw
+  name                  = local.vm_name
   resource_group_name   = var.resource_group_name
   location              = var.location
   vm_size               = var.vm_size
@@ -27,7 +30,7 @@ resource "azurerm_virtual_machine" "vm" {
   primary_network_interface_id = var.primary_network_interface_id
 
   os_profile {
-    computer_name   = module.caf_name_vm.gen
+    computer_name   = local.vm_name
     admin_username  = var.os_profile.admin_username 
     admin_password  = lookup(var.os_profile, "admin_password", null)
   }
