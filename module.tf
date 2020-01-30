@@ -4,9 +4,10 @@ module "caf_name_vm" {
   source = "git://github.com/aztfmod/terraform-azurerm-caf-naming.git?ref=ll-fixes"
   
   name    = var.name
-  type    = "gen"
+  type    = lower(var.os) == "linux" ? "vml" : "vmw"
   convention  = var.convention
 }
+
 
 resource "tls_private_key" "ssh" {
   algorithm   = "RSA"
@@ -14,7 +15,7 @@ resource "tls_private_key" "ssh" {
 }
 
 resource "azurerm_virtual_machine" "vm" {
-  name                  = module.caf_name_vm.gen
+  name                  = lower(var.os) == "linux" ? module.caf_name_vm.vml :module.caf_name_vm.vmw
   resource_group_name   = var.resource_group_name
   location              = var.location
   vm_size               = var.vm_size
