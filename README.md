@@ -48,7 +48,7 @@ module "vm" {
 | network_interface_ids | list(string) | Set of all NIC identifers |
 | primary_network_interface_id | string | Primary NIC ID |
 | admin_username | string | Name of the local admin account created | 
-| ssh_private_key_pem | string | Private Key of the VM | 
+| ssh_private_key_pem_secret_id | map | Map of keyvault_id and secret Id of the ssh_private_key_pem. The ssh_private_key_pem is base64encoded | 
 | msi_system_principal_id | string | Principal ID for the created VM | 
 | id | string | Identifier of the VM |
 | name | string | Name of the VM | 

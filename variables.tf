@@ -60,3 +60,4 @@ variable "convention" {
 variable "diagnostics_map" {}
 variable "log_analytics_workspace_id" {}
 variable "diagnostics_settings" {}
+variable "keyvault_id" {}
