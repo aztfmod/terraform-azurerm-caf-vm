@@ -136,7 +136,7 @@ resource "azurerm_key_vault_secret" "public_key_openssh" {
 resource "azurerm_key_vault_secret" "private_key_pem" {
   count = lower(var.os) == "linux" ? 1 : 0
 
-  name          = "${local.vm_name}-public-key-openssh"
+  name          = "${local.vm_name}-private-key-openssh"
   value         = base64encode(tls_private_key.ssh.0.private_key_pem)
   key_vault_id  = var.keyvault_id
 }
