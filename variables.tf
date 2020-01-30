@@ -56,3 +56,7 @@ variable "vm_size" {
 variable "convention" {
   description = "(Required) Naming convention to use."
 }
+
+variable "diagnostics_map" {}
+variable "log_analytics_workspace_id" {}
+variable "diagnostics_settings" {}
