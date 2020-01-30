@@ -14,7 +14,6 @@ output "admin_username" {
 }
 
 output "ssh_private_key_pem_secret_id" {
-    count = lower(var.os) == "linux" ? 1 : 0
     # sensitive = true
     description = "Map of keyvault_id and secret Id of the ssh_private_key_pem. The ssh_private_key_pem is base64encoded"
     value = {
