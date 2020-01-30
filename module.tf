@@ -13,6 +13,8 @@ locals {
 }
 
 resource "tls_private_key" "ssh" {
+  count = lower(var.os) == "linux" ? 1 : 0
+
   algorithm   = "RSA"
   rsa_bits    = 4096
 }
@@ -80,7 +82,7 @@ resource "azurerm_virtual_machine" "vm" {
       // TODO: ssh key management to be in external module
       ssh_keys {
           path  = "/home/${var.os_profile.admin_username}/.ssh/authorized_keys"
-          key_data  = tls_private_key.ssh.public_key_openssh
+          key_data  = tls_private_key.ssh.0.public_key_openssh
       }
     }
   }
@@ -119,4 +121,22 @@ resource "azurerm_virtual_machine" "vm" {
     command = "az vm restart --name ${azurerm_virtual_machine.vm.name} --resource-group ${var.resource_group_name}"
   } 
 
+}
+
+# Store the SSH keys in the keyvault
+
+resource "azurerm_key_vault_secret" "public_key_openssh" {
+  count = lower(var.os) == "linux" ? 1 : 0
+
+  name          = "${local.vm_name}-public_key_openssh"
+  value         = base64encode(tls_private_key.ssh.0.public_key_openssh)
+  key_vault_id  = var.key_vault_id
+}
+
+resource "azurerm_key_vault_secret" "private_key_pem" {
+  count = lower(var.os) == "linux" ? 1 : 0
+
+  name          = "${local.vm_name}-public_key_openssh"
+  value         = base64encode(tls_private_key.ssh.0.private_key_pem)
+  key_vault_id  = var.key_vault_id
 }

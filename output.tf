@@ -13,11 +13,14 @@ output "admin_username" {
     value = var.os_profile.admin_username
 }
 
-# TODO - get a keyvault created to insert the ssh key and share the kv secret id instead
 output "ssh_private_key_pem" {
-    depends_on = [azurerm_virtual_machine.vm]
+    count = lower(var.os) == "linux" ? 1 : 0
     # sensitive = true
-    value = base64encode(tls_private_key.ssh.private_key_pem)
+    description = "Keyvault ID and secret Id of the ssh_private_key_pem. The ssh_private_key_pem is base64encoded"
+    value = {
+        "keyvault_id"           = var.keyvault_id,
+        "ssh_private_key_pem"   = azurerm_key_vault_secret.private_key_pem.0.id
+    }
 }
 
 output "msi_system_principal_id" {
