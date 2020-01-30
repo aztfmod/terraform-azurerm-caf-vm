@@ -18,7 +18,7 @@ output "ssh_private_key_pem_secret_id" {
     description = "Map of keyvault_id and secret Id of the ssh_private_key_pem. The ssh_private_key_pem is base64encoded"
     value = {
         "name"                  = azurerm_key_vault_secret.private_key_pem.0.name
-        "key_vault_id"           = var.keyvault_id,
+        "key_vault_id"          = var.key_vault_id,
         "ssh_private_key_pem"   = azurerm_key_vault_secret.private_key_pem.0.id
     }
 }

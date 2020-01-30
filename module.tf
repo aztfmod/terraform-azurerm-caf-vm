@@ -130,7 +130,7 @@ resource "azurerm_key_vault_secret" "public_key_openssh" {
 
   name          = "${local.vm_name}-public-key-openssh"
   value         = base64encode(tls_private_key.ssh.0.public_key_openssh)
-  key_vault_id  = var.keyvault_id
+  key_vault_id  = var.key_vault_id
 }
 
 resource "azurerm_key_vault_secret" "private_key_pem" {
@@ -138,5 +138,5 @@ resource "azurerm_key_vault_secret" "private_key_pem" {
 
   name          = "${local.vm_name}-private-key-openssh"
   value         = base64encode(tls_private_key.ssh.0.private_key_pem)
-  key_vault_id  = var.keyvault_id
+  key_vault_id  = var.key_vault_id
 }
