@@ -130,34 +130,35 @@ resource "azurerm_virtual_machine" "vm" {
 
 }
 
-# Store the SSH keys in the keyvault
+# # Store the SSH keys in the keyvault
 
-resource "azurerm_key_vault_secret" "public_key_openssh" {
-  count = lower(var.os) == "linux" ? 1 : 0
+# resource "azurerm_key_vault_secret" "public_key_openssh" {
+#   count = lower(var.os) == "linux" ? 1 : 0
 
-  name          = "${azurecaf_naming_convention.vm_name.result}-public-key-openssh"
-  value         = base64encode(tls_private_key.ssh.0.public_key_openssh)
-  key_vault_id  = var.key_vault_id
+#   name          = "${azurecaf_naming_convention.vm_name.result}-public-key-openssh"
+#   value         = base64encode(tls_private_key.ssh.0.public_key_openssh)
+#   key_vault_id  = var.key_vault_id
 
-  lifecycle {
-    ignore_changes = [
-      key_vault_id
-    ]
-  }
+#   lifecycle {
+#     ignore_changes = [
+#       key_vault_id
+#     ]
+#   }
 
-}
+# }
 
-resource "azurerm_key_vault_secret" "private_key_pem" {
-  count = lower(var.os) == "linux" ? 1 : 0
+# resource "azurerm_key_vault_secret" "private_key_pem" {
+#   count = lower(var.os) == "linux" ? 1 : 0
 
-  name          = "${azurecaf_naming_convention.vm_name.result}-private-key-openssh"
-  value         = base64encode(tls_private_key.ssh.0.private_key_pem)
-  key_vault_id  = var.key_vault_id
+#   name          = "${azurecaf_naming_convention.vm_name.result}-private-key-openssh"
+#   value         = base64encode(tls_private_key.ssh.0.private_key_pem)
+#   key_vault_id  = var.key_vault_id
 
-  lifecycle {
-    ignore_changes = [
-      key_vault_id
-    ]
-  }
+#   lifecycle {
+#     ignore_changes = [
+#       key_vault_id
+#     ]
+#   }
   
-}
+# }
+
