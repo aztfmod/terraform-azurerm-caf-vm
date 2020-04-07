@@ -8,9 +8,9 @@
 #   convention  = var.convention
 # }
 
-resource "azurecaf_naming_convention" "vn_name" {
+resource "azurecaf_naming_convention" "vm_name" {
   name          = var.name
-  prefix        = local.prefix
+  prefix        = var.prefix
   resource_type = lower(var.os) == "linux" ? "vml" : "vmw"
   convention    = var.convention
 }
@@ -27,7 +27,7 @@ resource "tls_private_key" "ssh" {
 }
 
 resource "azurerm_virtual_machine" "vm" {
-  name                  = azurecaf_naming_convention.vn_name.result
+  name                  = azurecaf_naming_convention.vm_name.result
   resource_group_name   = var.resource_group_name
   location              = var.location
   vm_size               = var.vm_size
@@ -39,7 +39,7 @@ resource "azurerm_virtual_machine" "vm" {
   primary_network_interface_id = var.primary_network_interface_id
 
   os_profile {
-    computer_name   = local.vm_name
+    computer_name   = azurecaf_naming_convention.vm_name.result
     admin_username  = var.os_profile.admin_username 
     admin_password  = lookup(var.os_profile, "admin_password", null)
   }
@@ -135,7 +135,7 @@ resource "azurerm_virtual_machine" "vm" {
 resource "azurerm_key_vault_secret" "public_key_openssh" {
   count = lower(var.os) == "linux" ? 1 : 0
 
-  name          = "${local.vm_name}-public-key-openssh"
+  name          = "${azurecaf_naming_convention.vm_name.result}-public-key-openssh"
   value         = base64encode(tls_private_key.ssh.0.public_key_openssh)
   key_vault_id  = var.key_vault_id
 
@@ -150,7 +150,7 @@ resource "azurerm_key_vault_secret" "public_key_openssh" {
 resource "azurerm_key_vault_secret" "private_key_pem" {
   count = lower(var.os) == "linux" ? 1 : 0
 
-  name          = "${local.vm_name}-private-key-openssh"
+  name          = "${azurecaf_naming_convention.vm_name.result}-private-key-openssh"
   value         = base64encode(tls_private_key.ssh.0.private_key_pem)
   key_vault_id  = var.key_vault_id
 
