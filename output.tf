@@ -14,6 +14,7 @@ output "admin_username" {
 }
 
 output "ssh_private_key_pem_secret_id" {
+    depends_on = [azurerm_virtual_machine.vm]
     # sensitive = true
     description = "Map of keyvault_id and secret Id of the ssh_private_key_pem. The ssh_private_key_pem is base64encoded"
     value = {

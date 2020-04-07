@@ -1,16 +1,23 @@
-module "caf_name_vm" {
-  source  = "aztfmod/caf-naming/azurerm"
-  version = "~> 0.1.0"
-  # source = "git://github.com/aztfmod/terraform-azurerm-caf-naming.git?ref=ll-fixes"
+# module "caf_name_vm" {
+#   source  = "aztfmod/caf-naming/azurerm"
+#   version = "~> 0.1.0"
+#   # source = "git://github.com/aztfmod/terraform-azurerm-caf-naming.git?ref=ll-fixes"
   
-  name    = var.name
-  type    = lower(var.os) == "linux" ? "vml" : "vmw"
-  convention  = var.convention
+#   name    = var.name
+#   type    = lower(var.os) == "linux" ? "vml" : "vmw"
+#   convention  = var.convention
+# }
+
+resource "azurecaf_naming_convention" "vn_name" {
+  name          = var.name
+  prefix        = local.prefix
+  resource_type = lower(var.os) == "linux" ? "vml" : "vmw"
+  convention    = var.convention
 }
 
-locals {
-  vm_name = lower(var.os) == "linux" ? module.caf_name_vm.vml :module.caf_name_vm.vmw
-}
+# locals {
+#   vm_name = lower(var.os) == "linux" ? module.caf_name_vm.vml :module.caf_name_vm.vmw
+# }
 
 resource "tls_private_key" "ssh" {
   count = lower(var.os) == "linux" ? 1 : 0
@@ -20,7 +27,7 @@ resource "tls_private_key" "ssh" {
 }
 
 resource "azurerm_virtual_machine" "vm" {
-  name                  = local.vm_name
+  name                  = azurecaf_naming_convention.vn_name.result
   resource_group_name   = var.resource_group_name
   location              = var.location
   vm_size               = var.vm_size
