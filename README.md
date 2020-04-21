@@ -7,16 +7,22 @@ This virtual machine can be created from:
 Reference the module to a specific version (recommended):
 ```hcl
 module "vm" {
-    source  = "aztfmod/caf-container-registry/azurerm"
-    version = "0.x.y"
-    
-    resource_group_name               = var.rg
-    asr_vault_name                    = var.name
-    location                          = var.location
-    tags                              = var.tags
-    opslogs_retention_period          = var.retention
-    diagnostics_map                   = var.diagsmap
-    la_workspace_id                   = var.laworkspace.id
+  source  = "aztfmod/caf-vm/azurerm"
+  version = "0.x.y"
+  
+  prefix                        = var.prefix
+  convention                    = var.convention
+  name                          = var.name
+  resource_group_name           = var.resource_group
+  location                      = var.location 
+  tags                          = var.tags
+  network_interface_ids         = var.network_interface_ids
+  primary_network_interface_id  = var.primary_network_interface_id
+  os                            = var.os
+  os_profile                    = var.os_profile
+  storage_image_reference       = var.storage_image_reference
+  storage_os_disk               = var.storage_os_disk
+  vm_size                       = var.vm_size
 }
 ```
 
