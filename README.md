@@ -45,6 +45,7 @@ module "vm" {
 | storage_image_reference | string | None | storage_image_reference  | 
 | storage_os_disk | object | null | storage_os_disk  | 
 | vm_size | string | None | Azure VM size name, to list all images available in a regionm use : "az vm list-sizes --location <region>" | 
+| availability_set_id | string | null | A resource id of availability set to use  |
 
 
 ## Output
