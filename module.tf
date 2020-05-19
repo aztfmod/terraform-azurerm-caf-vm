@@ -114,4 +114,5 @@ resource "azurerm_virtual_machine" "vm" {
     command = "az vm restart --name ${azurerm_virtual_machine.vm.name} --resource-group ${var.resource_group_name}"
   } 
 
+  availability_set_id = var.availability_set_id
 }
