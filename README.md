@@ -29,14 +29,14 @@ module "vm" {
 ## Inputs
 
 | Name | Type | Default | Description | 
-| -- | -- | -- | -- | 
+| -- | -- | -- | -- |
+| prefix | string | None | Prefix to be used. |
+| convention | string | None | Naming convention to be used (check at the naming convention module for possible values).  | 
 | name | string | None | Specifies the name of the VM. Changing this forces a new resource to be created. |
 | resource_group_name | string | None | The name of the resource group in which to create the VM. Changing this forces a new resource to be created. |
 | location | string | None | Specifies the supported Azure location where to create the resource. Changing this forces a new resource to be created.  |
 | tags | map | None | Map of tags for the deployment.  | 
 | la_workspace_id | string | None | Log Analytics Repository ID. | 
-| diagnostics_map | map | None | Map with the diagnostics repository information.  | 
-| diagnostics_settings | object | None | Map with the diagnostics settings for VM deployment. See the required structure in the following example or in the diagnostics module documentation. |
 | network_interface_ids | list | False |  A list of Network Interface ID's which should be associated with the Virtual Machine | 
 | primary_network_interface_id | string | None | The primary Network Interface ID's which should be associated with the Virtual Machine. Note when using multiple NICs you must set it in the nic_object configuration | 
 | os | string | Windows |Define if the operating system is 'Linux' or 'Windows'  | 
