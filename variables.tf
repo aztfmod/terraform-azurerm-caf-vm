@@ -56,3 +56,8 @@ variable "vm_size" {
 variable "convention" {
   description = "(Required) Naming convention to use."
 }
+
+variable "availability_set_id" {
+  description = "(Optional) resource id of availability set to use."
+  default = null
+}
